@@ -1,8 +1,9 @@
 # vim:noet
 
 CC=g++
-LDLIBS+=-L ~/src/googletest -lgtest -lpthread
-CXXFLAGS+=-I ~/src/googletest -I..
+GTESTHOME=~/src/googletest
+LDLIBS+=-L $(GTESTHOME) -lgtest -lpthread
+CXXFLAGS+=-I $(GTESTHOME) -I $(CURDIR)/..
 
 vpath %.cpp $(CURDIR)/..
 
