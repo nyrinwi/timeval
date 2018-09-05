@@ -38,10 +38,36 @@ TEST(TimeSpec,int)
     EXPECT_EQ(1.6,TimeSpec(1,600000000).seconds());
 }
 
-TEST(API,misc)
+TEST(Timval,default)
+{
+    TimeVal tvd;
+    EXPECT_EQ(0, tvd.tv_sec);
+    TimeVal tsd;
+    EXPECT_EQ(0, tsd.tv_sec);
+}
+
+TEST(API,TimeVal)
+{
+    TimeVal tv(0,1);
+    EXPECT_EQ(0, select(0, 0, 0, 0, &tv) );
+
+    TimeVal tvf(.25);
+    EXPECT_EQ(0, select(0, 0, 0, 0, &tvf) );
+}
+
+TEST(API,TimeSpec)
 {
     TimeSpec ts(0,1);
-    TimeVal tv(0,1);
     EXPECT_EQ(0, nanosleep(&ts, NULL) );
-    EXPECT_EQ(0, select(0, 0, 0, 0, &tv) );
+
+
+    TimeSpec tsf(.25);
+    EXPECT_EQ(0, nanosleep(&tsf, NULL) );
+
+    time_t tref = time(NULL);
+    TimeVal tvd;
+    EXPECT_EQ(0,gettimeofday(&tvd,NULL));
+    EXPECT_GE(tref,tvd.tv_sec);
+    EXPECT_GE(tvd.tv_usec,0);
+    EXPECT_LT(tvd.tv_usec,1000000);
 }
